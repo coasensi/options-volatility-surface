@@ -1,0 +1,12 @@
+[theme]
+primaryColor = "#FF4B4B"          # Customize the primary color (e.g., for buttons)
+backgroundColor = "#0E1117"       # Set the background color of the app
+secondaryBackgroundColor = "#262730"  # Background color for elements like sidebar
+textColor = "#FAFAFA"             # Text color for the entire app
+font = "sans serif"               # Font style for text
+
+[server]
+enableCORS = true                 # Enable Cross-Origin Resource Sharing
+enableXsrfProtection = true       # Enable XSRF protection for added security
+port = 8501                       # Port number the app will run on
+enableStaticServing = true        # Serve static files from the /static directory
