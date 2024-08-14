@@ -1,8 +1,7 @@
 import streamlit as st
 import yfinance as yf
 import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+import plotly.graph_objs as go
 from datetime import datetime
 
 def fetch_options_data(ticker, option_type='call', style='american'):
@@ -23,20 +22,28 @@ def fetch_options_data(ticker, option_type='call', style='american'):
 
     return np.array(strikes), np.array(maturities), np.array(ivs)
 
-# plot volatility surface
 def plot_volatility_surface(strikes, maturities, ivs, option_type, style, ticker):
-    fig = plt.figure(figsize=(10, 8))
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot_trisurf(strikes, maturities, ivs, cmap='viridis', edgecolor='none')
-    ax.set_xlabel('Strike Price')
-    ax.set_ylabel('Maturity (Days)')
-    ax.set_zlabel('Implied Volatility')
-    ax.set_title(f'Volatility Surface for {ticker} {style.capitalize()} {option_type.capitalize()} Options')
-    st.pyplot(fig)
+    fig = go.Figure(data=[go.Surface(
+        x=strikes,
+        y=maturities,
+        z=ivs,
+        colorscale='Viridis',
+        showscale=True
+    )])
+    fig.update_layout(
+        title=f'Volatility Surface for {ticker} {style.capitalize()} {option_type.capitalize()} Options',
+        scene=dict(
+            xaxis_title='Strike Price',
+            yaxis_title='Maturity (Days)',
+            zaxis_title='Implied Volatility'
+        ),
+        autosize=True,
+        margin=dict(l=65, r=50, b=65, t=90)
+    )
+    st.plotly_chart(fig)
 
 def main():
     st.title("Volatility Surface Generator")
-
     ticker = st.sidebar.text_input("Enter the stock ticker (e.g., AAPL, TSLA): ").upper()
     option_type = st.sidebar.selectbox("Option Type", ('call', 'put'))
     style = 'american'
