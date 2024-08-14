@@ -55,8 +55,10 @@ def plot_volatility_surface(strikes, maturities, ivs, ticker, option_type):
             yaxis_title='Maturity (Days)',
             zaxis_title='Implied Volatility'
         ),
-        autosize=True,
-        margin=dict(l=65, r=50, b=65, t=90)
+        autosize=False,
+        width=1200,
+        height=800,
+        margin=dict(l=100, r=100, b=100, t=100)
     )
 
     st.plotly_chart(fig)
