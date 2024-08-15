@@ -90,7 +90,7 @@ def main():
             strikes, maturities, ivs = filter_strikes(strikes, maturities, ivs, spot_price, lower_bound, upper_bound)
 
         # maturity filter
-        if st.sidebar.checkbox("Exclude Short Maturity Options", value=True):
+        if st.sidebar.checkbox("Exclude 0dte Options", value=True):
             min_days = st.sidebar.slider('Minimum Days to Expiry', 0, 360, 1)
             strikes, maturities, ivs = exclude_short_maturity(strikes, maturities, ivs, min_days_to_expiry=min_days)
 
