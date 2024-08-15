@@ -86,7 +86,7 @@ def main():
         # strike price filter
         if st.sidebar.checkbox("Filter Strikes by Spot Price", value=True):
             lower_bound = st.sidebar.slider('Lower Bound as % of Spot Price', 0.0, 1.0, 0.5)
-            upper_bound = st.sidebar.slider('Upper Bound as % of Spot Price', 1.0, 2.0, 1.5)
+            upper_bound = st.sidebar.slider('Upper Bound as % of Spot Price', 1.0, 10.0, 1.5)
             strikes, maturities, ivs = filter_strikes(strikes, maturities, ivs, spot_price, lower_bound, upper_bound)
 
         # maturity filter
