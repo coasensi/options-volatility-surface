@@ -73,7 +73,7 @@ def plot_volatility_surface(strikes, maturities, ivs, ticker, option_type):
 
 def main():
     st.title("Volatility Surface Generator")
-    ticker = st.sidebar.text_input("Enter the stock ticker (e.g., AAPL, MSFT): ").upper()
+    ticker = st.sidebar.text_input("Enter the stock ticker (e.g., AAPL, TSLA): ").upper()
     option_type = st.sidebar.selectbox("Option Type", ('call', 'put'))
 
     if ticker:
