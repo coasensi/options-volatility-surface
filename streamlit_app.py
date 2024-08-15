@@ -23,10 +23,12 @@ def fetch_options_data(ticker, option_type='call'):
 
     return np.array(strikes), np.array(maturities), np.array(ivs)
 
+# fn to exclude deep ITM and OTM options
 def filter_strikes(strikes, maturities, ivs, spot_price, lower_bound=0.5, upper_bound=1.5):
     mask = (strikes >= spot_price * lower_bound) & (strikes <= spot_price * upper_bound)
     return strikes[mask], maturities[mask], ivs[mask]
 
+# fn to exclude options with short maturity
 def exclude_short_maturity(strikes, maturities, ivs, min_days_to_expiry=1):
     mask = maturities >= min_days_to_expiry
     return strikes[mask], maturities[mask], ivs[mask]
@@ -78,15 +80,16 @@ def main():
 
     if ticker:
         strikes, maturities, ivs = fetch_options_data(ticker, option_type)
-        
         stock = yf.Ticker(ticker)
-        spot_price = stock.history(period="1d")['Close'][0]
+        spot_price = stock.history(period="1d")['Close'][0]  # Get the latest close price as spot price
 
+        # strike price filter
         if st.sidebar.checkbox("Filter Strikes by Spot Price", value=True):
             lower_bound = st.sidebar.slider('Lower Bound as % of Spot Price', 0.0, 1.0, 0.5)
             upper_bound = st.sidebar.slider('Upper Bound as % of Spot Price', 1.0, 2.0, 1.5)
             strikes, maturities, ivs = filter_strikes(strikes, maturities, ivs, spot_price, lower_bound, upper_bound)
 
+        # maturity filter
         if st.sidebar.checkbox("Exclude Short Maturity Options", value=True):
             min_days = st.sidebar.slider('Minimum Days to Expiry', 0, 30, 1)
             strikes, maturities, ivs = exclude_short_maturity(strikes, maturities, ivs, min_days_to_expiry=min_days)
