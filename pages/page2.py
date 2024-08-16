@@ -1,3 +1,6 @@
+# page2.py
+# streamlit: name="IV"
+
 import streamlit as st
 import yfinance as yf
 import numpy as np
@@ -23,10 +26,12 @@ def fetch_options_data(ticker, option_type='call'):
 
     return np.array(strikes), np.array(maturities), np.array(ivs)
 
+# fn to exclude deep ITM and OTM options
 def filter_strikes(strikes, maturities, ivs, spot_price, lower_bound=0.5, upper_bound=1.5):
     mask = (strikes >= spot_price * lower_bound) & (strikes <= spot_price * upper_bound)
     return strikes[mask], maturities[mask], ivs[mask]
 
+# fn to exclude options with short maturity
 def exclude_short_maturity(strikes, maturities, ivs, min_days_to_expiry=1):
     mask = maturities >= min_days_to_expiry
     return strikes[mask], maturities[mask], ivs[mask]
@@ -71,7 +76,7 @@ def plot_volatility_surface(strikes, maturities, ivs, ticker, option_type):
 
     st.plotly_chart(fig)
 
-def app():
+def main():
     st.title("Volatility Surface Generator")
     ticker = st.sidebar.text_input("Enter the stock ticker (e.g., AAPL, TSLA): ").upper()
     option_type = st.sidebar.selectbox("Option Type", ('call', 'put'))
@@ -98,3 +103,6 @@ def app():
             st.write("No data available. Please check the ticker or try a different option type.")
     else:
         st.write("Please enter a stock ticker to generate the volatility surface.")
+
+if __name__ == "__main__":
+    main()
